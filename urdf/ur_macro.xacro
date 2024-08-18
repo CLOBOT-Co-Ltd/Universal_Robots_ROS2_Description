@@ -142,6 +142,15 @@
         />
     </xacro:if>
 
+    <!-- Define color -->
+    <material name="white">
+      <color rgba="1 1 1 1" />
+    </material>
+
+    <material name="blue">
+      <color rgba="0 0 1 1" />
+    </material>
+
     <!-- Add URDF transmission elements (for ros_control) -->
     <!--<xacro:ur_arm_transmission prefix="${prefix}" hw_interface="${transmission_hw_interface}" />-->
     <!-- Placeholder for ros2_control transmission which don't yet exist -->
@@ -271,10 +280,57 @@
       </xacro:cylinder_inertial>
     </link>
 
+    <!-- Define my_link -->
+    <link name="base_table">
+      <visual>
+        <origin xyz="0 0 0.25" />
+        <geometry>
+          <box size="1.32 0.8 0.5" />
+        </geometry>
+        <material name="white" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.25" />
+        <geometry>
+          <box size="1.32 0.8 0.5" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="profile1">
+      <visual>
+      <origin xyz="0 0 0.45" />
+        <geometry>
+          <box size="0.03 0.35 0.9" />
+        </geometry>
+        <material name="blue" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.45" />
+        <geometry>
+          <box size="0.03 0.35 0.9" />
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Define my joint -->
+    <joint name="{tf_prefix}base_table_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${parent}" />
+      <child link="base_table" />
+    </joint>
+
+    <joint name="${tf_prefix}profile_joint" type="fixed">
+      <origin xyz="0.3 0 0.505" rpy="0 0 0"/>
+      <parent link="base_table" />
+      <child link="profile1" />
+    </joint>
+
     <!-- base_joint fixes base_link to the environment -->
     <joint name="${tf_prefix}base_joint" type="fixed">
+      <origin xyz="0 0 0.505" rpy="0 0 0"/>
       <xacro:insert_block name="origin" />
-      <parent link="${parent}" />
+      <parent link="base_table" />
       <child link="${tf_prefix}base_link" />
     </joint>
 
