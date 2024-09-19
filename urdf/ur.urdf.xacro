@@ -5,6 +5,12 @@
    <!-- import main macro -->
    <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
 
+  <!-- Include Camera D435i -->
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
+
+  <!-- Include 2F-140 gripper -->
+  <xacro:include filename="$(find robotiq_description)/urdf/robotiq_2f_140_macro.urdf.xacro" />
+
    <!-- possible 'ur_type' values: ur3, ur3e, ur5, ur5e, ur10, ur10e, ur16e, ur20, ur30 -->
    <!-- the default value should raise an error in case this was called without defining the type -->
    <xacro:arg name="ur_type" default="ur5x"/>
@@ -121,4 +127,11 @@
     </gazebo>
   </xacro:if>
 
+  <xacro:sensor_d435 parent="base_link" name="upper_camera">
+    <origin xyz="0.349 0 0.92" rpy="${pi} ${pi/2.0} 0" />
+  </xacro:sensor_d435>
+
+  <xacro:robotiq_gripper parent="wrist_3_link" name="gripper" prefix="" use_fake_hardware="$(arg use_fake_hardware)">
+    <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+  </xacro:robotiq_gripper>
 </robot>
